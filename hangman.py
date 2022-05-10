@@ -1,17 +1,27 @@
 import random
-from tokenize import blank_re
+import draw_hangman
+from pyfiglet import Figlet
+from termcolor import colored, cprint
 
 random_words = [
     'arsenal', 'aardvark', 'beetlejuice', 'cairo', 'portland', 'disguise', 'geography', 'volcano',
     'sandwiche', 'pineapple', 'beetroot', 'giraffe'
 ]
 
+options = ['Play ','Rules', 'Quit']
+
 lives = 7
+
 guessed_list = []
+
+f = Figlet(font='banner3-D')
+
+print_red = lambda x: cprint(x, 'red')
+print_green = lambda x: cprint(x, 'green')
 
 
 def pick_random_word(word_list):
-    index = random.randint(0, len(word_list))
+    index = random.randint(0, (len(word_list) -1))
     return word_list[index]
 
 def user_guess(blank_string):
@@ -57,6 +67,24 @@ def check_game_over(random_word):
             else: print('\n', 'Please enter a valid response, either y or n ', '\n')
     else: return
 
+def draw_hangman_game(lives):
+    if lives == 7:
+        draw_hangman.all_lives()
+    elif lives == 6:
+        draw_hangman.six_lives()
+    elif lives == 5:
+        draw_hangman.five_lives()
+    elif lives == 4:
+        draw_hangman.four_lives()
+    elif lives == 3:
+        draw_hangman.three_lives()
+    elif lives ==2:
+        draw_hangman.two_lives()
+    elif lives == 1:
+        draw_hangman.one_life()
+    else:
+        draw_hangman.gameover_draw()
+
 
 def check_guess(random_word, blank_string):
     while True:
@@ -68,14 +96,19 @@ def check_guess(random_word, blank_string):
                 if random_word[i] == guess:
                     blank_string[i] = guess
             print('\n')
+            global lives
+            draw_hangman_game(lives)
+            print_green('Correct!')
+            print('\n')
             for space in blank_string:
                 print(space, sep='', end='')
             print('\n')                
         else:
-            global lives
             lives = lives-1
+            draw_hangman_game(lives)
             check_game_over(random_word)
-            print('\n', f"You have {lives} lives left", '\n')
+            print_red(f"You have {lives} lives left")
+            print('\n')
             for i in blank_string:
                 print(i, sep='', end='')
             print('\n')
@@ -85,11 +118,20 @@ def check_guess(random_word, blank_string):
 def main():
     global guessed_list
     guessed_list = []
-    print('\n', 'Welcome to Hangman', '\n')
+    print('\n \n')
+    print(colored(f.renderText('Hangman'), 'green'))
+    print('\n \n')
+    print_green('Please choose from the following options')
+    print('\n')
+    for count, item in enumerate(options,1):
+        print(count, item, end='               ')
+    print('\n')
     while True:
-        answer = input('Do you wish to proceed with the game? Please choose Y / N: ')
-        if answer.lower() == 'y':
-            print('\n', 'Get Ready to play', '\n')
+        answer = input('Enter 1, 2 or 3 : ')
+        if answer== '1':
+            print('\n')
+            print_green('Game Loading...')
+            print('\n')
             break
         elif answer.lower() == 'n':
             print('\n', 'Sorry to hear that , goodbye')
@@ -97,6 +139,7 @@ def main():
         else: print('\n', 'PLease enter a valid response, either y or n ', '\n')
     random_word = pick_random_word(random_words)
     blank_string = len(random_word) * ['_']
+    draw_hangman.all_lives()
     for i in blank_string:
         print(i, sep='', end='')
     print('\n')
