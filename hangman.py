@@ -1,4 +1,5 @@
 import random
+from tokenize import blank_re
 
 random_words = [
     'arsenal', 'aardvark', 'beetlejuice', 'cairo', 'portland', 'disguise', 'geography', 'volcano',
@@ -10,7 +11,7 @@ guessed_list = []
 
 
 def pick_random_word(word_list):
-    index = 2 # random.randint(0, len(word_list))
+    index = random.randint(0, len(word_list))
     return word_list[index]
 
 def user_guess(blank_string):
@@ -39,10 +40,11 @@ def check_game_win(list):
     else:
         return
 
-def check_game_over():
+def check_game_over(random_word):
     global lives
     if lives <= 0:
-        print('\n', 'Unlucky - Game Over')
+        print('\n', 'Unlucky - Game Over', '\n')
+        print('\n', f"The random word was \n \n -- {random_word} --", '\n')
         lives = 7
         while True:
             replay = input('Do you want to play again? : ')
@@ -72,7 +74,7 @@ def check_guess(random_word, blank_string):
         else:
             global lives
             lives = lives-1
-            check_game_over()
+            check_game_over(random_word)
             print('\n', f"You have {lives} lives left", '\n')
             for i in blank_string:
                 print(i, sep='', end='')
@@ -95,6 +97,9 @@ def main():
         else: print('\n', 'PLease enter a valid response, either y or n ', '\n')
     random_word = pick_random_word(random_words)
     blank_string = len(random_word) * ['_']
-    n = 0
+    for i in blank_string:
+        print(i, sep='', end='')
+    print('\n')
     check_guess(random_word, blank_string)
+
 main()
