@@ -150,13 +150,8 @@ def check_guess(random_word, blank_string):
             print('\n')
         check_game_win(blank_string)
 
-
-def main():
-    global guessed_list
-    guessed_list = []
-    print('\n \n')
-    print(colored(f.renderText('Hangman'), 'green'))
-    print('\n \n')
+def main_menu():
+    """ Function for the player to chose to play , see the rules or exit """
     print_green('Please choose from the following options')
     print('\n')
     for count, item in enumerate(options,1):
@@ -168,12 +163,20 @@ def main():
             print('\n')
             print_green('Game Loading...')
             print('\n')
-            break
+            return
         elif answer == '2':
             rules()
         elif answer == '3':
             quit()
-        else: print('\n', 'PLease enter a valid response, either y or n ', '\n')
+        else: print('\n', 'PLease enter a valid response 1, 2 or 3', '\n')
+
+def main():
+    global guessed_list
+    guessed_list = []
+    print('\n \n')
+    print(colored(f.renderText('Hangman'), 'green'))
+    print('\n \n')
+    main_menu()
     random_word = pick_random_word(random_words)
     blank_string = len(random_word) * ['_']
     draw_hangman.all_lives()
